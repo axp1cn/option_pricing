@@ -12,7 +12,7 @@ asian::~asian() {};
 double asian::price() const {
     // manage of an option constructed by the default constructor and underlying_asset not initialized
     if (underlying_asset == nullptr) {
-        cout << "The option has not been initialised (the pointer of the underlying is not initialised). Thus, the price doesn't exist.";
+        std::cout << "The option has not been initialised (the pointer of the underlying is not initialised). Thus, the price doesn't exist.";
         return 0;
     }
     
@@ -49,7 +49,7 @@ double asian::price() const {
             return V / N;
         }
         else {
-            cout << "We do not price an asian option where underlying asset pays dividends." << endl;
+            std::cout << "We do not price an asian option where underlying asset pays dividends." << endl;
             return 0;
         }
     }
@@ -87,7 +87,7 @@ double asian::price() const {
             return V / N;
         }
         else {
-            cout << "We do not price an asian option where underlying asset pays dividends." << endl;
+            std::cout << "We do not price an asian option where underlying asset pays dividends." << endl;
             return 0;
         }
     }
@@ -99,6 +99,6 @@ string asian::type() const {
 }
 /*
 void asian::replication() const {
-    cout << "Replication not implemented in this program. (An " << this->type() << " is not easily replicable)." << endl;
+    std::cout << "Replication not implemented in this program. (An " << this->type() << " is not easily replicable)." << endl;
 }
 */
