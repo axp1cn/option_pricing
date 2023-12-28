@@ -1,6 +1,5 @@
 #include "american.hpp"
 #include "tools.hpp"
-using namespace std;
 
 // Destructor
 american::~american(){};
@@ -9,13 +8,14 @@ american::~american(){};
 double american::price() const{
     // manage of an option constructed by the default constructor and underlying_asset not initialized
     if (underlying_asset == nullptr) {
-        cout << "The option has not been initialised (the pointer of the underlying is not initialised). Thus, the price doesn't exist.";
+        std::cout << "The option has not been initialised (the pointer of the underlying is not initialised). Thus, the price doesn't exist.";
         return 0;
     }
     
     if (position == "call") {
+        // No dividends
         if((*underlying_asset).get_alias_Dividends().get_Type() == 0){
-            cout << " (Pricing may take a few minutes...) " << endl;
+            std::cout << " (Pricing may take a few minutes...) " << endl;
             
             // getting assets attributes
             double S_0 = (*underlying_asset).get_SpotPrice();
@@ -120,13 +120,14 @@ double american::price() const{
             delete Ptr_Mat_Simulation;
             return (1.0/branche_d)*Mean_value;
         }else{
-            cout << "We do not price an american option where underlying asset pays dividends." << endl;
+            std::cout << "We do not price an american option where underlying asset pays dividends." << endl;
             return 0;
         }
     }
     else {
+        // For an american put
         if (((*underlying_asset).get_alias_Dividends().get_Type()!=1) && ((*underlying_asset).get_alias_Dividends().get_Type() != 2)){
-        cout << "(Pricing may take a few minutes...) ";
+        std::cout << "(Pricing may take a few minutes...) ";
 
         // getting assets attributes
         double S_0 = (*underlying_asset).get_SpotPrice();
@@ -231,7 +232,7 @@ double american::price() const{
         delete Ptr_Mat_Simulation;
         return (1.0/branche_d)*Mean_value;
         }else{
-            cout << "\nWe do not price an american option where underlying asset pays dividends." << endl;
+            std::cout << "\nWe do not price an american option where underlying asset pays dividends." << endl;
             return 0;
         }
     }
@@ -243,6 +244,6 @@ string american::type() const {
 };
 /*
 void american::replication() const {
-    cout << "Replication not implemented in this program. (An " << this->type() << " is not easily replicable)." << endl;
+    std::cout << "Replication not implemented in this program. (An " << this->type() << " is not easily replicable)." << endl;
 };
 */
