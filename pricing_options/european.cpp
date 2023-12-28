@@ -13,7 +13,7 @@ european::~european() {};
 double european::price() const {
     // manage of an option constructed by the default constructor and underlying_asset not initialized
     if (underlying_asset == nullptr) {
-        cout << "The option has not been initialised (the pointer of the underlying is not initialised). Thus, the price doesn't exist.";
+        std::cout << "The option has not been initialised (the pointer of the underlying is not initialised). Thus, the price doesn't exist.";
         return 0;
     }
     if (position == "call") {
@@ -96,7 +96,7 @@ string european::type() const {
 void european::replication() const {
     // manage of an option constructed by the default constructor and underlying_asset not initialized
     if (underlying_asset == nullptr) {
-        cout << "The option has not been initialised (the pointer of the underlying is not initialised). Thus, replication is not possible";
+        std::cout << "The option has not been initialised (the pointer of the underlying is not initialised). Thus, replication is not possible";
     }
 
     if (position == "call") {
@@ -115,22 +115,22 @@ void european::replication() const {
         if ((*underlying_asset).get_alias_Dividends().get_Type() == 2) {
             double rate = (*underlying_asset).get_alias_Dividends().get_Rate();
             
-            cout << "The replication of the buy of this " << this->type() << ", which value is " << this->price() << ", is : ";
-            cout << "\n * The buy on the same underlying asset of an " << put;
-            cout << "\n * The buy of the underlying asset.";
-            cout << "\n * The borrow of " << exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - exp(-rate * maturity)) << " on the risk free rate market. ";
-            cout << "\n The balance of the replication is " << put.price() + (*underlying_asset).get_SpotPrice() -( exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - exp(-rate * maturity))) << " (which is indeed equal to the spot price of the replicated option).\n\n\n";
+            std::cout << "The replication of the buy of this " << this->type() << ", which value is " << this->price() << ", is : ";
+            std::cout << "\n * The buy on the same underlying asset of an " << put;
+            std::cout << "\n * The buy of the underlying asset.";
+            std::cout << "\n * The borrow of " << exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - exp(-rate * maturity)) << " on the risk free rate market. ";
+            std::cout << "\n The balance of the replication is " << put.price() + (*underlying_asset).get_SpotPrice() -( exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - exp(-rate * maturity))) << " (which is indeed equal to the spot price of the replicated option).\n\n\n";
         }
         // ------------ lump dividends ----------------
         else {
             double rate = (*underlying_asset).get_alias_Dividends().get_Rate();
             int n = DividendCounter(maturity, (*underlying_asset).get_alias_Dividends().get_Next(), (*underlying_asset).get_alias_Dividends().get_Periods()); // calculates the number of coupon detachments before the option's maturity
             
-            cout << "The replication of the buy of this " << this->type() << ", which value is " << this->price() << ", is : ";
-            cout << "\n * The buy on the same underlying asset of an " << put;
-            cout << "\n * The buy of the underlying asset.";
-            cout << "\n * The borrow of " << exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - pow(1 - rate, n)) << " on the risk free rate market. ";
-            cout << "\n The balance of the replication is " << put.price() + (*underlying_asset).get_SpotPrice() - (exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - pow(1 - rate, n))) << " (which is indeed equal to the spot price of the replicated option).\n\n\n";
+            std::cout << "The replication of the buy of this " << this->type() << ", which value is " << this->price() << ", is : ";
+            std::cout << "\n * The buy on the same underlying asset of an " << put;
+            std::cout << "\n * The buy of the underlying asset.";
+            std::cout << "\n * The borrow of " << exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - pow(1 - rate, n)) << " on the risk free rate market. ";
+            std::cout << "\n The balance of the replication is " << put.price() + (*underlying_asset).get_SpotPrice() - (exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - pow(1 - rate, n))) << " (which is indeed equal to the spot price of the replicated option).\n\n\n";
         }
     }
     else{
@@ -139,21 +139,21 @@ void european::replication() const {
 
         // ------------- no dividends ----------------
         if ((*underlying_asset).get_alias_Dividends().get_Type() == 0) {
-            cout << "The replication of the buy of this " << this->type() << ", which value is " << this->price() << ", is : ";
-            cout << "\n * The buy, on the same underlying asset, of an " << call;
-            cout << "\n * The sell of the underlying asset.";
-            cout << "\n * The investment of " << exp(-r * maturity) * strike << " on the risk free rate market. ";
-            cout << "\n The balance of the replication is " << call.price() - (*underlying_asset).get_SpotPrice() + exp(-r * maturity) * strike << " (which is indeed equal to the spot price of the replicated option).\n\n\n";
+            std::cout << "The replication of the buy of this " << this->type() << ", which value is " << this->price() << ", is : ";
+            std::cout << "\n * The buy, on the same underlying asset, of an " << call;
+            std::cout << "\n * The sell of the underlying asset.";
+            std::cout << "\n * The investment of " << exp(-r * maturity) * strike << " on the risk free rate market. ";
+            std::cout << "\n The balance of the replication is " << call.price() - (*underlying_asset).get_SpotPrice() + exp(-r * maturity) * strike << " (which is indeed equal to the spot price of the replicated option).\n\n\n";
         }
         // ------------- continuous dividends ----------------
         if ((*underlying_asset).get_alias_Dividends().get_Type() == 2) {
             double rate = (*underlying_asset).get_alias_Dividends().get_Rate();
 
-            cout << "The replication of the buy of this " << this->type() << ", which value is " << this->price() << ", is : ";
-            cout << "\n * The buy, on the same underlying asset, of an " << call;
-            cout << "\n * The sell of the underlying asset. (It is a short selling, you will have to pay the continuous dividends)";
-            cout << "\n * The investment of " << exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - exp(-rate * maturity)) << " on the risk free rate market. "; // strike*e^(-r*maturity) - spot(e^(-rate*maturity)-1)
-            cout << "\n The balance of the replication is " << call.price() - (*underlying_asset).get_SpotPrice() + exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice()*(1-exp(-rate*maturity)) << " (which is indeed equal to the spot price of the replicated option).\n\n\n";
+            std::cout << "The replication of the buy of this " << this->type() << ", which value is " << this->price() << ", is : ";
+            std::cout << "\n * The buy, on the same underlying asset, of an " << call;
+            std::cout << "\n * The sell of the underlying asset. (It is a short selling, you will have to pay the continuous dividends)";
+            std::cout << "\n * The investment of " << exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - exp(-rate * maturity)) << " on the risk free rate market. "; // strike*e^(-r*maturity) - spot(e^(-rate*maturity)-1)
+            std::cout << "\n The balance of the replication is " << call.price() - (*underlying_asset).get_SpotPrice() + exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice()*(1-exp(-rate*maturity)) << " (which is indeed equal to the spot price of the replicated option).\n\n\n";
 
         }
         // ------------- lump dividends ----------------
@@ -161,11 +161,11 @@ void european::replication() const {
             double rate = (*underlying_asset).get_alias_Dividends().get_Rate();
             int n = DividendCounter(maturity, (*underlying_asset).get_alias_Dividends().get_Next(), (*underlying_asset).get_alias_Dividends().get_Periods()); // calculates the number of coupon detachments before the option's maturity
 
-            cout << "The replication of the buy of this " << this->type() << ", which value is " << this->price() << ", is : ";
-            cout << "\n * The buy, on the same underlying asset, of an " << call;
-            cout << "\n * The sell of the underlying asset. (It is a short selling, you will have to pay the continuous dividends)";
-            cout << "\n * The investment of " << exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - pow(1 - rate, n)) << " on the risk free rate market. "; // strike*e^(-r*maturity) - spot(e^(-rate*maturity)-1)
-            cout << "\n The balance of the replication is " << call.price() - (*underlying_asset).get_SpotPrice() + exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() *(1- pow((1 - rate), n)) << " (which is indeed equal to the spot price of the replicated option).\n\n\n";
+            std::cout << "The replication of the buy of this " << this->type() << ", which value is " << this->price() << ", is : ";
+            std::cout << "\n * The buy, on the same underlying asset, of an " << call;
+            std::cout << "\n * The sell of the underlying asset. (It is a short selling, you will have to pay the continuous dividends)";
+            std::cout << "\n * The investment of " << exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() * (1 - pow(1 - rate, n)) << " on the risk free rate market. "; // strike*e^(-r*maturity) - spot(e^(-rate*maturity)-1)
+            std::cout << "\n The balance of the replication is " << call.price() - (*underlying_asset).get_SpotPrice() + exp(-r * maturity) * strike + (*underlying_asset).get_SpotPrice() *(1- pow((1 - rate), n)) << " (which is indeed equal to the spot price of the replicated option).\n\n\n";
 
         }
     }
