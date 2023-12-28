@@ -2,8 +2,6 @@
 #include <iostream>
 
 int DividendCounter(double Delta, double Next, double Periods);
-int euclidian_division(double x, double y);
-double modulo(double x, double y);
 
 class dividend {
 protected:
