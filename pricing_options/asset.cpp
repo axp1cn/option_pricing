@@ -21,7 +21,7 @@ dividend::dividend(int DividendsType, double DividendsRate, double DividendsPeri
     this->Type = DividendsType;
     this->Rate = DividendsRate;
     this->Periods = DividendsPeriods;
-    this->Next = modulo(NextDividend, DividendsPeriods);
+    this->Next = fmod(NextDividend, DividendsPeriods);
 }
 
 dividend::dividend(const dividend& Div){
@@ -67,7 +67,7 @@ void dividend::set_Periods(double Periods){
 }
 
 void dividend::set_Next(double Next){
-    this->Next = modulo(Next, this->Periods);
+    this->Next = fmod(Next, this->Periods);
 }
 
 void dividend::operator=(const dividend& Div){
@@ -175,7 +175,7 @@ void asset::Asset_Actualization(double NewTime, double SpotPrice){
 
     if(this->Dividends.get_Type() != 0 && this->Dividends.get_Periods() != 0){
     //double NextDividend = (Periods - Delta%Periods + OldNext)%Periods;
-    double NextDividend = modulo((Periods - modulo(Delta, Periods) + OldNext),Periods);
+    double NextDividend = fmod((Periods - fmod(Delta, Periods) + OldNext),Periods);
 
     if(NextDividend == 0.0){
         this->Dividends.set_Next(Periods);
@@ -202,7 +202,6 @@ asset asset::Asset_Estimation(double Time, double RiskFreeRate) const{
 
     if(DivType == 0){
         ExpectedPrice = PriceOldTime * exp( RiskFreeRate * (Time - OldTime) );
-        AssetEstimate.Asset_Actualization(Time, ExpectedPrice);
     }else if(DivType == 1){
         int DivCount = DividendCounter( Time - OldTime, Next, Periods);
         ExpectedPrice = PriceOldTime * exp( RiskFreeRate * (Time - OldTime)) * pow((1 - DivRate), DivCount);
@@ -217,16 +216,9 @@ asset asset::Asset_Estimation(double Time, double RiskFreeRate) const{
 //************** Tools functions **************
 
 int DividendCounter(double Delta, double Next, double Periods){
-    return euclidian_division(Delta + Periods - Next, Periods);
+    return (Delta + Periods - Next) / Periods;
 }
 
-int euclidian_division(double x, double y){
-    return x/y;
-}
-
-double modulo(double x, double y){
-    return x - (euclidian_division(x,y)*y);
-}
 
 std::istream& operator>>(std::istream& input, asset& Asset){
     std::cout << "\nAsset builder:\n";
@@ -247,6 +239,9 @@ std::istream& operator>>(std::istream& input, asset& Asset){
     double Periods = 0;
     double RateDiv = 0;
     input >> DividendsType;
+    if !(DividendsType==0 || DividendsType==1 || DividendsType==2) {
+        std::cout << "This type isn't available, please choose between:/n-type 0 : no dividends/n-type 1 : lump dividend/n-type 2 : continuous dividend;
+            }
     if(DividendsType != 0){
         std::cout << "Enter the dividends' rate (in %): ";
         input >> RateDiv;
