@@ -239,9 +239,9 @@ std::istream& operator>>(std::istream& input, asset& Asset){
     double Periods = 0;
     double RateDiv = 0;
     input >> DividendsType;
-    if !(DividendsType==0 || DividendsType==1 || DividendsType==2) {
-        std::cout << "This type isn't available, please choose between:/n-type 0 : no dividends/n-type 1 : lump dividend/n-type 2 : continuous dividend;
-            }
+    if (!(DividendsType==0 || DividendsType==1 || DividendsType==2)) {
+        std::cout << "This type isn't available, please choose between:/n-type 0 : no dividends/n-type 1 : lump dividend/n-type 2 : continuous dividend";
+    }
     if(DividendsType != 0){
         std::cout << "Enter the dividends' rate (in %): ";
         input >> RateDiv;
