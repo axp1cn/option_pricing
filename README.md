@@ -1,2 +1,3 @@
-# Option Pricer (ENSAE Paris academic project)
+# Options Pricer 
+ENSAE Paris academic project under Mrs. Dumitrescu
 
