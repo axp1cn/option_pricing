@@ -1,2 +1,2 @@
-# option_pricing
-Option Pricer (ENSAE Paris academic project)
+# Option Pricer (ENSAE Paris academic project)
+
